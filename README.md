@@ -93,4 +93,45 @@ Update the content in the component files:
 ### Theme Customization
 Modify the theme in `src/lib/theme.ts` to customize colors, spacing, typography, and breakpoints for styled-components.
 
+## Deployment
+
+### GitHub Pages
+
+This project is configured for GitHub Pages deployment with automated CI/CD.
+
+#### Setup Steps:
+
+1. **Repository Settings:**
+   - Go to your repository Settings → Pages
+   - Set Source to "GitHub Actions"
+
+2. **Automatic Deployment:**
+   - Push changes to the `main` branch
+   - GitHub Actions will automatically build and deploy your site
+   - Site will be available at `https://[username].github.io/[repository-name]`
+
+3. **Manual Deployment:**
+   ```bash
+   # Build for production
+   npm run build
+   
+   # The static files will be generated in the 'out' folder
+   # These can be served by any static hosting service
+   ```
+
+#### Configuration Details:
+
+- **Next.js Config:** Configured for static export with `output: 'export'`
+- **GitHub Actions:** Automated build and deployment workflow
+- **Static Assets:** All images and assets are optimized for static hosting
+- **Routing:** Uses trailing slashes for GitHub Pages compatibility
+
+### Other Deployment Options
+
+The generated static files in the `out` folder can be deployed to any static hosting service:
+- Netlify
+- Vercel
+- AWS S3
+- Firebase Hosting
+
 Built with ❤️ using Next.js, Tailwind CSS, and styled-components.
