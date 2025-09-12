@@ -122,9 +122,11 @@ This project is configured for GitHub Pages deployment with automated CI/CD.
 #### Configuration Details:
 
 - **Next.js Config:** Configured for static export with `output: 'export'`
-- **GitHub Actions:** Automated build and deployment workflow
+- **GitHub Actions:** Automated build and deployment workflow that pushes to `gh-pages` branch
 - **Static Assets:** All images and assets are optimized for static hosting
 - **Routing:** Uses trailing slashes for GitHub Pages compatibility
+
+> **Note:** The workflow builds the site and deploys it to the `gh-pages` branch to avoid environment protection rules on the main branch.
 
 ### Other Deployment Options
 
