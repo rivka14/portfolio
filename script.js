@@ -14,6 +14,51 @@ themeToggle.addEventListener('click', () => {
     localStorage.setItem('theme', newTheme);
 });
 
+// Typewriter Animation
+const typewriterElement = document.getElementById('typewriter');
+const titles = ['Software Developer', 'AI Engineer'];
+let titleIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+let typingSpeed = 100;
+
+function typeWriter() {
+    const currentTitle = titles[titleIndex];
+
+    if (isDeleting) {
+        // Deleting characters
+        typewriterElement.textContent = currentTitle.substring(0, charIndex - 1);
+        charIndex--;
+        typingSpeed = 50;
+    } else {
+        // Typing characters
+        typewriterElement.textContent = currentTitle.substring(0, charIndex + 1);
+        charIndex++;
+        typingSpeed = 100;
+    }
+
+    // Check if word is complete
+    if (!isDeleting && charIndex === currentTitle.length) {
+        // Pause at end of word
+        typingSpeed = 2000;
+        isDeleting = true;
+    } else if (isDeleting && charIndex === 0) {
+        // Move to next word
+        isDeleting = false;
+        titleIndex = (titleIndex + 1) % titles.length;
+        typingSpeed = 500;
+    }
+
+    setTimeout(typeWriter, typingSpeed);
+}
+
+// Start typewriter animation when page loads
+function initTypewriter() {
+    if (typewriterElement) {
+        setTimeout(typeWriter, 1000);
+    }
+}
+
 // Animated Background Particles
 function createParticle() {
     const particlesContainer = document.getElementById('particles');
@@ -62,8 +107,7 @@ function initParticles() {
     }, 400);
 }
 
-// Initialize particles when page loads
-document.addEventListener('DOMContentLoaded', initParticles);
+// Particles will be initialized from main DOMContentLoaded listener
 
 // Navbar Scroll Effect
 const navbar = document.getElementById('navbar');
@@ -332,6 +376,8 @@ function displayContributedRepos(repos) {
 
 // Load GitHub repos and contributions when page loads
 document.addEventListener('DOMContentLoaded', () => {
+    initTypewriter();
+    initParticles();
     fetchGitHubRepos();
     fetchContributedRepos();
 });
