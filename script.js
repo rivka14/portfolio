@@ -26,24 +26,19 @@ function typeWriter() {
     const currentTitle = titles[titleIndex];
 
     if (isDeleting) {
-        // Deleting characters
         typewriterElement.textContent = currentTitle.substring(0, charIndex - 1);
         charIndex--;
         typingSpeed = 50;
     } else {
-        // Typing characters
         typewriterElement.textContent = currentTitle.substring(0, charIndex + 1);
         charIndex++;
         typingSpeed = 100;
     }
 
-    // Check if word is complete
     if (!isDeleting && charIndex === currentTitle.length) {
-        // Pause at end of word
         typingSpeed = 2000;
         isDeleting = true;
     } else if (isDeleting && charIndex === 0) {
-        // Move to next word
         isDeleting = false;
         titleIndex = (titleIndex + 1) % titles.length;
         typingSpeed = 500;
@@ -52,62 +47,12 @@ function typeWriter() {
     setTimeout(typeWriter, typingSpeed);
 }
 
-// Start typewriter animation when page loads
+// Start typewriter animation
 function initTypewriter() {
     if (typewriterElement) {
         setTimeout(typeWriter, 1000);
     }
 }
-
-// Animated Background Particles
-function createParticle() {
-    const particlesContainer = document.getElementById('particles');
-    if (!particlesContainer) return;
-
-    const particle = document.createElement('div');
-    particle.className = 'particle';
-
-    // Random size between 6px and 16px (larger particles)
-    const size = Math.random() * 10 + 6;
-    particle.style.width = `${size}px`;
-    particle.style.height = `${size}px`;
-
-    // Random horizontal position
-    particle.style.left = `${Math.random() * 100}%`;
-    particle.style.bottom = '0';
-
-    // Random horizontal movement
-    const xMovement = (Math.random() - 0.5) * 300;
-    particle.style.setProperty('--x-movement', `${xMovement}px`);
-
-    // Random animation duration between 3 and 6 seconds (faster)
-    const duration = Math.random() * 3 + 3;
-    particle.style.animation = `floatParticle ${duration}s linear`;
-
-    particlesContainer.appendChild(particle);
-
-    // Remove particle after animation completes
-    setTimeout(() => {
-        particle.remove();
-    }, duration * 1000);
-}
-
-// Create particles at intervals
-function initParticles() {
-    // Create initial particles (reduced for performance)
-    for (let i = 0; i < 15; i++) {
-        setTimeout(() => {
-            createParticle();
-        }, i * 150);
-    }
-
-    // Continue creating particles
-    setInterval(() => {
-        createParticle();
-    }, 400);
-}
-
-// Particles will be initialized from main DOMContentLoaded listener
 
 // Navbar Scroll Effect
 const navbar = document.getElementById('navbar');
@@ -168,8 +113,8 @@ window.addEventListener('scroll', () => {
 
 // Intersection Observer for Fade-in Animations
 const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
+    threshold: 0.15,
+    rootMargin: '0px 0px -80px 0px'
 };
 
 const observer = new IntersectionObserver((entries) => {
@@ -185,10 +130,14 @@ document.querySelectorAll('.fade-in').forEach(el => {
     observer.observe(el);
 });
 
-// Load animations when page loads
+// Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
     initTypewriter();
-    initParticles();
+
+    // Add loaded class for any page load animations
+    setTimeout(() => {
+        document.body.classList.add('loaded');
+    }, 100);
 });
 
 // Contact Form Handling
@@ -215,7 +164,7 @@ contactForm.addEventListener('submit', (e) => {
         return;
     }
 
-    // Simulate form submission (since there's no backend)
+    // Simulate form submission
     showFormMessage('Thank you for your message! I will get back to you soon.', 'success');
     contactForm.reset();
 
@@ -259,68 +208,18 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Parallax Effect for Hero Background
+// Add subtle parallax effect to hero section
 window.addEventListener('scroll', () => {
     const heroBackground = document.querySelector('.hero-bg');
     if (heroBackground) {
         const scrolled = window.pageYOffset;
-        heroBackground.style.transform = `translateY(${scrolled * 0.5}px)`;
+        heroBackground.style.transform = `translateY(${scrolled * 0.3}px)`;
     }
 });
 
-// Add loading state animation
-window.addEventListener('load', () => {
-    document.body.classList.add('loaded');
-});
-
-// Cursor Trail Effect (optional - subtle enhancement)
-document.addEventListener('mousemove', (e) => {
-    const trail = document.createElement('div');
-    trail.className = 'cursor-trail';
-    trail.style.left = e.pageX + 'px';
-    trail.style.top = e.pageY + 'px';
-
-    document.body.appendChild(trail);
-
-    setTimeout(() => {
-        trail.remove();
-    }, 1000);
-});
-
-// Add subtle particle effect on buttons hover
-document.querySelectorAll('.btn').forEach(button => {
-    button.addEventListener('mouseenter', function(e) {
-        const rect = this.getBoundingClientRect();
-
-        for (let i = 0; i < 3; i++) {
-            const particle = document.createElement('span');
-            particle.style.position = 'absolute';
-            particle.style.width = '4px';
-            particle.style.height = '4px';
-            particle.style.background = 'var(--accent-primary)';
-            particle.style.borderRadius = '50%';
-            particle.style.pointerEvents = 'none';
-            particle.style.left = (Math.random() * rect.width) + 'px';
-            particle.style.top = (Math.random() * rect.height) + 'px';
-            particle.style.opacity = '0';
-            particle.style.transition = 'all 0.5s ease';
-
-            this.style.position = 'relative';
-            this.appendChild(particle);
-
-            setTimeout(() => {
-                particle.style.opacity = '1';
-                particle.style.transform = `translateY(-20px)`;
-            }, 10);
-
-            setTimeout(() => {
-                particle.remove();
-            }, 500);
-        }
-    });
-});
-
 // Console Easter Egg
-console.log('%c👋 Hi there, fellow developer!', 'color: #4361ee; font-size: 20px; font-weight: bold;');
-console.log('%cLooking at the code? I like your style! 🚀', 'color: #667eea; font-size: 14px;');
-console.log('%cFeel free to reach out: rivka.weiss9@gmail.com', 'color: #764ba2; font-size: 12px;');
+console.log('%c█▀▀ █▀█ █▀▄ █▀▀', 'color: #0A7C91; font-size: 16px; font-family: monospace; font-weight: bold;');
+console.log('%c█   █ █ █ █ █▀▀', 'color: #06B6D4; font-size: 16px; font-family: monospace; font-weight: bold;');
+console.log('%c▀▀▀ ▀▀▀ ▀▀  ▀▀▀', 'color: #FF6B6B; font-size: 16px; font-family: monospace; font-weight: bold;');
+console.log('%cLooking at the code? Nice! 🚀', 'color: #0A7C91; font-size: 14px; font-family: monospace;');
+console.log('%cFeel free to reach out: rivka.weiss9@gmail.com', 'color: #FF6B6B; font-size: 12px; font-family: monospace;');
