@@ -33,7 +33,6 @@ const CONFIG = {
 const themeToggle = document.getElementById('themeToggle');
 const html = document.documentElement;
 
-// Load saved theme preference or default to dark
 const savedTheme = localStorage.getItem('theme') || 'dark';
 try {
     if (savedTheme === 'dark') {
@@ -58,7 +57,6 @@ if (themeToggle) {
             }
             localStorage.setItem('theme', newTheme);
 
-            // Reinitialize neural network with new theme colors
             if (neuralNetwork) {
                 initNeuralNetwork();
             }
@@ -81,13 +79,11 @@ function initNeuralNetwork() {
     if (!canvas) return;
 
     try {
-        // Cancel any existing animation
         if (animationFrameId) {
             cancelAnimationFrame(animationFrameId);
             animationFrameId = null;
         }
 
-        // If it's not already a canvas, replace it
         if (canvas.tagName !== 'CANVAS') {
             const newCanvas = document.createElement('canvas');
             newCanvas.id = 'neuralNetwork';
@@ -128,15 +124,12 @@ function initNeuralNetwork() {
         }
 
         function convertToRGBA(color, opacity) {
-            // Handle rgba colors
             if (color.includes('rgba')) {
                 return color.replace(/[\d.]+\)$/, `${opacity})`);
             }
-            // Handle rgb colors
             if (color.includes('rgb')) {
                 return color.replace('rgb', 'rgba').replace(')', `, ${opacity})`);
             }
-            // Fallback for hex or other formats
             return `rgba(76, 110, 245, ${opacity})`;
         }
 
@@ -147,33 +140,26 @@ function initNeuralNetwork() {
                 const nodeColor = getColor('--neural-node');
                 const connectionColor = getColor('--neural-connection');
 
-                // Update and draw nodes
                 nodes.forEach((node, i) => {
-                    // Move nodes
                     node.x += node.vx;
                     node.y += node.vy;
 
-                    // Bounce off edges
                     if (node.x < 0 || node.x > neuralNetwork.width) node.vx *= -1;
                     if (node.y < 0 || node.y > neuralNetwork.height) node.vy *= -1;
 
-                    // Keep within bounds
                     node.x = Math.max(0, Math.min(neuralNetwork.width, node.x));
                     node.y = Math.max(0, Math.min(neuralNetwork.height, node.y));
 
-                    // Draw node
                     ctx.beginPath();
                     ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
                     ctx.fillStyle = nodeColor;
                     ctx.fill();
 
-                    // Add glow
                     ctx.shadowBlur = 10;
                     ctx.shadowColor = nodeColor;
                     ctx.fill();
                     ctx.shadowBlur = 0;
 
-                    // Draw connections
                     nodes.slice(i + 1).forEach(otherNode => {
                         const dx = node.x - otherNode.x;
                         const dy = node.y - otherNode.y;
@@ -246,7 +232,6 @@ function typeWriter() {
     }
 }
 
-// Start typewriter animation
 function initTypewriter() {
     if (typewriterElement) {
         setTimeout(typeWriter, CONFIG.TYPEWRITER.INITIAL_DELAY);
@@ -261,12 +246,10 @@ const sections = document.querySelectorAll('section');
 const navLinks = document.querySelectorAll('.nav-link');
 let lastScroll = 0;
 
-// Unified scroll handler for better performance
 function handleScroll() {
     try {
         const currentScroll = window.pageYOffset;
 
-        // Navbar scroll effect
         if (navbar) {
             if (currentScroll > CONFIG.SCROLL.NAVBAR_SCROLL_THRESHOLD) {
                 navbar.classList.add('scrolled');
@@ -275,7 +258,6 @@ function handleScroll() {
             }
         }
 
-        // Active navigation link on scroll
         let current = '';
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
@@ -293,7 +275,6 @@ function handleScroll() {
             }
         });
 
-        // Parallax effect for hero section
         const heroBackground = document.querySelector('.hero-bg');
         if (heroBackground) {
             heroBackground.style.transform = `translateY(${currentScroll * CONFIG.SCROLL.PARALLAX_SPEED}px)`;
@@ -319,7 +300,6 @@ if (hamburger && navMenu) {
         navMenu.classList.toggle('active');
     });
 
-    // Close mobile menu when clicking on a link
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', () => {
             hamburger.classList.remove('active');
@@ -332,7 +312,6 @@ if (hamburger && navMenu) {
 function initAnimeAnimations() {
     if (typeof anime === 'undefined') {
         console.warn('Anime.js not loaded, using fallback animations');
-        // Fallback to CSS animations
         const observerOptions = {
             threshold: 0.15,
             rootMargin: '0px 0px -80px 0px'
@@ -352,7 +331,6 @@ function initAnimeAnimations() {
         return;
     }
 
-    // Hero content animation
     anime({
         targets: '.hero-content',
         opacity: [0, 1],
@@ -362,13 +340,11 @@ function initAnimeAnimations() {
         delay: 300
     });
 
-    // Section title animations
     const observeSections = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
                 entry.target.classList.add('animated');
 
-                // Animate section titles
                 const title = entry.target.querySelector('.section-title');
                 if (title) {
                     anime({
@@ -380,7 +356,6 @@ function initAnimeAnimations() {
                     });
                 }
 
-                // Animate section subtitle
                 const subtitle = entry.target.querySelector('.section-subtitle');
                 if (subtitle) {
                     anime({
@@ -393,7 +368,6 @@ function initAnimeAnimations() {
                     });
                 }
 
-                // Animate about content
                 const aboutContent = entry.target.querySelector('.about-content');
                 if (aboutContent) {
                     anime({
@@ -406,7 +380,6 @@ function initAnimeAnimations() {
                     });
                 }
 
-                // Animate skills container
                 const skillsContainer = entry.target.querySelector('.skills-container');
                 if (skillsContainer) {
                     anime({
@@ -418,7 +391,6 @@ function initAnimeAnimations() {
                         easing: 'easeOutExpo'
                     });
 
-                    // Stagger animate skill tags
                     const skillTags = skillsContainer.querySelectorAll('.skill-tag');
                     anime({
                         targets: skillTags,
@@ -430,7 +402,6 @@ function initAnimeAnimations() {
                     });
                 }
 
-                // Animate project cards
                 const projectsGrid = entry.target.querySelector('.projects-grid');
                 if (projectsGrid) {
                     anime({
@@ -451,7 +422,6 @@ function initAnimeAnimations() {
                     });
                 }
 
-                // Animate contact content
                 const contactContent = entry.target.querySelector('.contact-content');
                 if (contactContent) {
                     anime({
@@ -464,7 +434,6 @@ function initAnimeAnimations() {
                     });
                 }
 
-                // Animate experience/education cards
                 const cards = entry.target.querySelectorAll('.experience-card, .education-card');
                 if (cards.length > 0) {
                     anime({
@@ -483,7 +452,6 @@ function initAnimeAnimations() {
         rootMargin: '0px 0px -100px 0px'
     });
 
-    // Observe all sections
     sections.forEach(section => {
         observeSections.observe(section);
     });
@@ -495,7 +463,6 @@ function initAnimeAnimations() {
 const contactForm = document.getElementById('contactForm');
 const formMessage = document.getElementById('formMessage');
 
-// Improved email validation regex
 const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
 function validateEmail(email) {
@@ -649,10 +616,3 @@ window.addEventListener('beforeunload', () => {
         console.error('Error during cleanup:', error);
     }
 });
-
-// Console Easter Egg
-console.log('%c╔═══════════════════════════════════╗', 'color: #4c6ef5; font-size: 12px; font-family: monospace; font-weight: bold;');
-console.log('%c║   NEURAL NETWORK PORTFOLIO v2.0   ║', 'color: #7c3aed; font-size: 12px; font-family: monospace; font-weight: bold;');
-console.log('%c╚═══════════════════════════════════╝', 'color: #4c6ef5; font-size: 12px; font-family: monospace; font-weight: bold;');
-console.log('%c🔮 Powered by AI & Machine Learning', 'color: #4c6ef5; font-size: 14px; font-family: monospace;');
-console.log('%c📧 Contact: rivka.weiss9@gmail.com', 'color: #7c3aed; font-size: 12px; font-family: monospace;');
